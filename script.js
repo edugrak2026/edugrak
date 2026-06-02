@@ -134,6 +134,7 @@ async function initAppData() {
         const data = await response.json();
         if (data && Object.keys(data).length > 5) { // Ensure it's not an empty object
             appData = data;
+            localStorage.setItem('edugrakAppData', JSON.stringify(appData));
             console.log('AppData loaded from server');
         } else {
             // If server is empty, initialize it with DEFAULT_DATA
@@ -489,10 +490,6 @@ function hideAllSections() {
 }
 
 function switchTab(tab) {
-    // Refresh appData from localStorage whenever switching tabs to ensure synchronization
-    appData = JSON.parse(localStorage.getItem('edugrakAppData')) || DEFAULT_DATA;
-    refreshDerivedData();
-
     hideAllSections();
     
     // Reset nav buttons
