@@ -1,5 +1,5 @@
 // Initial State & Static Data
-const API_URL = "https://database-edugrak.vercel.app/api"; 
+const API_URL = "https://database-edugrak.vercel.app/api"; // Menggunakan IP agar cocok dengan 127.0.0.1:5500
 let currentUser = null;
 const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"; 
 
@@ -27,18 +27,74 @@ const INDONESIA_REGIONS = {
 };
 
 const DEFAULT_DATA = {
-    videos: [],
+    videos: [
+        { id: 1, title: "Strategi Literasi Bahasa Indonesia - Memahami Ide Pokok", subject: "LBI", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", duration: "12:45", description: "Pelajari cara cepat menemukan ide pokok dalam teks panjang untuk UTBK.", tags: ["#lbi", "#utbk"] },
+        { id: 2, title: "Pengetahuan Kuantitatif: Trik Cepat Aljabar", subject: "PK", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", duration: "15:20", description: "Kumpulan rumus praktis aljabar yang sering muncul di ujian.", tags: ["#pk", "#matematika"] }
+    ],
     questionsBank: {
-        'Bedah Materi': {},
-        'Soal Paket': {},
-        'Kuis Kilat': {},
-        'Arena TO': {}
+        'Bedah Materi': {
+            'LBI': {
+                'Ejaan': [
+                    { q: "Manakah penulisan kata baku yang benar?", a: ["Apotik", "Apotek", "Analisa", "Praktek"], correct: 1, explain: "Kata baku yang benar menurut KBBI adalah Apotek, Analisis, dan Praktik." }
+                ],
+                'Kalimat Efektif': [
+                    { q: "Kalimat manakah yang merupakan kalimat efektif?", a: ["Bagi semua siswa diharapkan hadir.", "Semua siswa diharapkan hadir.", "Untuk para siswa-siswa sekalian.", "Kehadiran daripada siswa sangat penting."], correct: 1, explain: "Kalimat efektif tidak menggunakan kata depan yang mubazir." }
+                ]
+            },
+            'PK': {
+                'Aljabar': [
+                    { q: "Jika 2x + 5 = 15, maka nilai x adalah...", a: ["2", "5", "10", "7"], correct: 1, explain: "2x = 15 - 5 => 2x = 10 => x = 5." }
+                ]
+            }
+        },
+        'Soal Paket': {
+            'all': {
+                'Paket Tryout 1': [
+                    { q: "[PAKET 1] Apa lawan kata dari 'Progresif'?", a: ["Statis", "Aktif", "Pasif", "Lambat"], correct: 0, explain: "Lawan kata progresif (maju) adalah statis (tetap/diam)." }
+                ]
+            }
+        },
+        'Kuis Kilat': {
+            'all': {
+                'Kuis Harian 1': [
+                    { q: "[KUIS] Penulisan huruf kapital yang benar adalah...", a: ["Suku Jawa", "suku Jawa", "Suku jawa", "suku jawa"], correct: 1, explain: "Nama suku diawali kapital, namun kata 'suku' tidak." }
+                ]
+            }
+        },
+        'Arena TO': {
+            'Tryout Nasional Akbar 2027': {
+                'LBI': [
+                    { q: "[ARENA TO] Manakah yang merupakan kelompok kata baku?", a: ["Izin, Ijasah, Aktif", "Ijin, Ijazah, Aktip", "Izin, Ijazah, Aktif", "Ijin, Ijasah, Aktif"], correct: 2, explain: "Kata baku yang benar adalah Izin (bukan Ijin), Ijazah (bukan Ijasah), dan Aktif (bukan Aktip)." }
+                ],
+                'PK': [
+                    { q: "[ARENA TO] Hasil dari 0,75 + 1/4 adalah...", a: ["0,80", "1,00", "1,25", "1,50"], correct: 1, explain: "0,75 + 0,25 = 1,00." }
+                ],
+                'PPU': [
+                    { q: "[ARENA TO] Sinonim dari kata 'Efisien' adalah...", a: ["Efektif", "Tepat Guna", "Hemat", "Cepat"], correct: 1, explain: "Efisien berarti tepat guna atau melakukan sesuatu dengan usaha minimum for hasil maksimum." }
+                ]
+            }
+        }
     },
     latihanDetails: {
-        'Bedah Materi': {},
-        'Soal Paket': {},
-        'Kuis Kilat': {},
-        'Arena TO': {}
+        'Bedah Materi': { 
+            'LBI': [{ name: 'Ejaan', duration: 0 }, { name: 'Kalimat Efektif', duration: 0 }], 
+            'PK': [{ name: 'Aljabar', duration: 0 }, { name: 'Aritmatika', duration: 0 }], 
+            'default': [{ name: 'Topik 1', duration: 0 }, { name: 'Topik 2', duration: 0 }] 
+        },
+        'Soal Paket': { 'all': [{ name: 'Paket Tryout 1', duration: 0 }, { name: 'Paket Tryout 2', duration: 0 }] },
+        'Kuis Kilat': { 'all': [{ name: 'Kuis Harian 1', duration: 60 }, { name: 'Kuis Tantangan', duration: 120 }] },
+        'Arena TO': { 
+            'all': [
+                { 
+                    name: 'Tryout Nasional Akbar 2027', 
+                    duration: 1800, 
+                    status: 'Published',
+                    startDate: '2027-05-30',
+                    endDate: '2027-06-05',
+                    description: 'Sesuai standar terbaru BPPP dengan sistem penilaian IRT.'
+                }
+            ] 
+        }
     },
     subtesData: [
         { id: 'PU', name: 'Penalaran Umum', icon: '🧠', color: 'indigo' },
@@ -49,17 +105,24 @@ const DEFAULT_DATA = {
         { id: 'LBE', name: 'Literasi Bahasa Inggris', icon: '🇬🇧', color: 'rose' },
         { id: 'PM', name: 'Penalaran Matematika', icon: 'Σ', color: 'indigo' }
     ],
-    exerciseConfigs: {
-        'Bedah Materi': { icon: '📖', desc: 'Latihan per topik materi.', isPremium: false },
-        'Soal Paket': { icon: '📝', desc: 'Simulasi paket soal.', isPremium: false },
-        'Kuis Kilat': { icon: '⚡', desc: 'Kuis singkat.', isPremium: false },
-        'Arena TO': { icon: '🏆', desc: 'Tryout Nasional.', isPremium: false }
+    leaderboards: {
+        'Tryout Nasional Akbar 2027': {
+            nasional: [
+                { name: 'Achmad Yusuf', score: 845, region: 'Jawa Timur', rank: 1 },
+                { name: 'Siti Aminah', score: 832, region: 'DKI Jakarta', rank: 2 },
+                { name: 'Budi Santoso', score: 815, region: 'Jawa Barat', rank: 3 }
+            ],
+            provinsi: [
+                { name: 'Achmad Yusuf', score: 845, region: 'Malang', rank: 1 },
+                { name: 'Dewi Lestari', score: 790, region: 'Surabaya', rank: 2 }
+            ],
+            kota: [
+                { name: 'Achmad Yusuf', score: 845, region: 'Kec. Lowokwaru', rank: 1 },
+                { name: 'Gani Rahman', score: 730, region: 'Kec. Klojen', rank: 2 }
+            ]
+        }
     },
-    leaderboards: {},
-    irtConfigs: {},
-    premiumPackages: [],
-    coupons: [],
-    users: []
+    users: [] // Store registered users here
 };
 
 // Initialize appData from Server or DEFAULT_DATA
@@ -67,30 +130,24 @@ let appData = DEFAULT_DATA;
 
 async function initAppData() {
     try {
-        console.log('Bimbel: Menghubungkan ke API...');
         const response = await fetch(`${API_URL}/appdata`);
         const data = await response.json();
-        
-        if (data && Object.keys(data).length > 5) {
+        if (data && Object.keys(data).length > 5) { // Ensure it's not an empty object
             appData = data;
-            // Ensure all required keys exist
-            if (!appData.coupons) appData.coupons = [];
-            if (!appData.premiumPackages) appData.premiumPackages = [];
-            if (!appData.exerciseConfigs) appData.exerciseConfigs = DEFAULT_DATA.exerciseConfigs;
-            
-            localStorage.setItem('edugrakAppData', JSON.stringify(appData));
-            console.log('Bimbel: Data berhasil dimuat dari server');
+            console.log('AppData loaded from server');
         } else {
-            console.log('Bimbel: Server kosong, menggunakan data lokal/default');
-            const local = localStorage.getItem('edugrakAppData');
-            if (local) appData = JSON.parse(local);
+            // If server is empty, initialize it with DEFAULT_DATA
+            await saveData();
         }
         refreshDerivedData();
+        renderDynamicFilters();
     } catch (err) {
-        console.error('Bimbel: Gagal memuat data dari server:', err);
-        const local = localStorage.getItem('edugrakAppData');
-        if (local) appData = JSON.parse(local);
+        console.error('Error loading AppData from server:', err);
+        // Fallback to local storage or default data
+        const localData = localStorage.getItem('edugrakAppData');
+        if (localData) appData = JSON.parse(localData);
         refreshDerivedData();
+        renderDynamicFilters();
     }
 }
 
@@ -432,6 +489,10 @@ function hideAllSections() {
 }
 
 function switchTab(tab) {
+    // Refresh appData from localStorage whenever switching tabs to ensure synchronization
+    appData = JSON.parse(localStorage.getItem('edugrakAppData')) || DEFAULT_DATA;
+    refreshDerivedData();
+
     hideAllSections();
     
     // Reset nav buttons
@@ -1485,10 +1546,7 @@ function renderAnalysisReview(filterSubtest = null) {
             <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
                 <div class="flex items-start flex-1">
                     <span class="w-10 h-10 rounded-xl flex items-center justify-center font-black mr-4 shrink-0 ${isCorrect ? 'bg-emerald-600 text-white' : userAns === null ? 'bg-gray-300 text-white' : 'bg-rose-500 text-white'}">${i+1}</span>
-                    <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-lg leading-relaxed">${q.q}</p>
-                        ${q.image ? `<div class="mt-4 rounded-2xl overflow-hidden border border-gray-100 max-w-md"><img src="${q.image}" class="w-full h-auto"></div>` : ''}
-                    </div>
+                    <p class="font-bold text-gray-900 text-lg leading-relaxed">${q.q}</p>
                 </div>
                 <div class="flex flex-col items-end shrink-0">
                     <div class="px-4 py-2 bg-white text-emerald-600 text-[10px] font-black rounded-xl border-2 border-emerald-100 shadow-sm whitespace-nowrap mb-2">
